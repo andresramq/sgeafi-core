@@ -3,17 +3,16 @@ import { validateSync } from 'class-validator'
 import { EnvironmentVariables } from './env.validation.js'
 
 export function validate(config: Record<string, unknown>) {
-  const validatedConfig = plainToInstance(
-    EnvironmentVariables,
-    config,
-    { enableImplicitConversion: true },
-  )
-
-  const errors = validateSync(validatedConfig, {
-    skipMissingProperties: false
+  const validatedConfig = plainToInstance(EnvironmentVariables, config, {
+    enableImplicitConversion: true,
   })
 
-  if (errors.length > 0) throw new Error(`Error in environment variable validation:\n${errors.toString()}`)
+  const errors = validateSync(validatedConfig, {
+    skipMissingProperties: false,
+  })
+
+  if (errors.length > 0)
+    throw new Error(`Error in environment variable validation:\n${errors.toString()}`)
 
   return validatedConfig
 }
