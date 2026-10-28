@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountStatus {
+  INACTIVE
+  ACTIVE
+}
+
+model Account {
+  id     String        @id @default(uuid()) @db.Uuid
+  code   BigInt        @unique @default(autoincrement())
+  name   String        @db.VarChar(255)
+  status AccountStatus @default(INACTIVE)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  contacts AccountContact[]
+  users    User[]
+
+  @@map("accounts")
+}
+
+model AccountContact {
+  id          String  @id @default(uuid()) @db.Uuid
+  accountId   String  @map("account_id") @db.Uuid
+  name        String  @db.VarChar(255)
+  email       String  @unique @db.VarChar(255)
+  phoneNumber String? @map("phone_number") @db.VarChar(50)
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@map("account_contacts")
+}
+
+model User {
+  id           String  @id @default(uuid()) @db.Uuid
+  accountId    String  @map("account_id") @db.Uuid
+  passwordHash String  @map("password_hash") @db.VarChar(255)
+  name         String? @db.VarChar(255)
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@map("users")
+}

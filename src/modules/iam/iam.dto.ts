@@ -4,18 +4,21 @@ import { Transform } from 'class-transformer'
 export class IamRegisterDto {
   @IsString()
   @IsNotEmpty()
-  @MaxLength(120)
+  @MaxLength(255)
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   accountName!: string
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(120)
+  @MaxLength(255)
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   name!: string
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(20)
+  @MaxLength(50)
   @IsPhoneNumber('CO')
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   phoneNumber!: string
 
   @IsNotEmpty()
@@ -27,6 +30,6 @@ export class IamRegisterDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(8)
-  @MaxLength(120)
+  @MaxLength(255)
   password!: string
 }
