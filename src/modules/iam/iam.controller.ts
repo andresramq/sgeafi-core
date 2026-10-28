@@ -8,7 +8,7 @@ export class IamController {
 
   @Post()
   @HttpCode(201)
-  register(@Body() body: IamRegisterDto) {
+  async register(@Body() body: IamRegisterDto): Promise<boolean> {
     return this.iamService.register(body)
   }
 }

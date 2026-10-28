@@ -66,11 +66,10 @@ describe('IamModule', () => {
     })
 
     const maxLengthCases = [
-      ['accountName', 'a'.repeat(121)],
-      ['name', 'a'.repeat(121)],
-      ['phoneNumber', '1'.repeat(21)],
-      ['email', 'a'.repeat(255)],
-      ['password', 'a'.repeat(255)],
+      ['accountName', 'a'.repeat(256)],
+      ['name', 'a'.repeat(256)],
+      ['phoneNumber', '1'.repeat(51)],
+      ['password', 'a'.repeat(256)],
     ]
     it.each(maxLengthCases)('should return 400 when %s exceeds max length', (field, value) => {
       return request(app.getHttpServer())

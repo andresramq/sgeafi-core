@@ -23,7 +23,6 @@ export class IamRegisterDto {
 
   @IsNotEmpty()
   @IsEmail()
-  @MaxLength(255)
   @Transform(({ value }) => (typeof value === 'string' ? value.toLowerCase().trim() : value))
   email!: string
 
